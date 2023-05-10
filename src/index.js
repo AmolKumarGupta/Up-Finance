@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
@@ -12,16 +12,20 @@ import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 // import Index from "views/Index.js";
 
+export const AuthContext = createContext({})
+
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Route path="/admin" component={Admin} />
-      <Route path="/auth" component={Auth} />
-      <Route path="/landing" exact component={Landing} />
-      <Route path="/profile" exact component={Profile} />
-      <Route path="/" component={Admin} />
-      <Redirect from="*" to="/admin" />
-    </Switch>
-  </BrowserRouter>,
+  <AuthContext.Provider value={{ token: null }}>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/admin" component={Admin} />
+        <Route path="/auth" component={Auth} />
+        <Route path="/landing" exact component={Landing} />
+        <Route path="/profile" exact component={Profile} />
+        <Route path="/" component={Admin} />
+        <Redirect from="*" to="/admin" />
+      </Switch>
+    </BrowserRouter>
+  </AuthContext.Provider>,
   document.getElementById("root")
 );

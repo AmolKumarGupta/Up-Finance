@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 // components
@@ -14,8 +14,15 @@ import Dashboard from "views/admin/Dashboard.js";
 import Maps from "views/admin/Maps.js";
 import Settings from "views/admin/Settings.js";
 import Tables from "views/admin/Tables.js";
+import { AuthContext } from "index";
 
-export default function Admin() {
+export default function Admin({ history }) {
+  const auth = useContext(AuthContext);
+
+  if (!auth.token) {
+    history.push('/auth')
+  }
+
   return (
     <>
       <Sidebar />
