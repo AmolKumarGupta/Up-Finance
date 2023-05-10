@@ -1,5 +1,5 @@
-import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 
 // components
 
@@ -14,8 +14,18 @@ import Dashboard from "views/admin/Dashboard.js";
 import Maps from "views/admin/Maps.js";
 import Settings from "views/admin/Settings.js";
 import Tables from "views/admin/Tables.js";
+import { AuthContext } from "index";
 
 export default function Admin() {
+  const auth = useContext(AuthContext);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!auth.token) {
+      history.push('/auth')
+    }
+  }, [history, auth.token])
+
   return (
     <>
       <Sidebar />
