@@ -17,7 +17,6 @@ export const AuthContext = createContext({})
 
 function App() {
   const [token, setToken] = useAuth();
-
   return (
     <AuthContext.Provider value={{ token, setToken }}>
       <BrowserRouter>
