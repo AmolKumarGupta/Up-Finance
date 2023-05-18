@@ -118,7 +118,7 @@ export default function Sidebar() {
                 >
                   <i
                     className={
-                      "fas fa-tools mr-2 text-sm " +
+                      "fas fa-user mr-2 text-sm " +
                       (window.location.href.indexOf("/admin/profile") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
