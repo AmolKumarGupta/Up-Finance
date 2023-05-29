@@ -36,7 +36,11 @@ const config = [
         title: "Register",
         link: "/auth/register"
       },
-
+      {
+        icon: "fas fa-table",
+        title: "TestTable",
+        link: "/test"
+      }
     ]
   }
 ]
