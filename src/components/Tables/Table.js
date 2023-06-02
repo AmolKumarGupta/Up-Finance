@@ -5,7 +5,9 @@ export default function Table({
   foot,
   data,
   attr,
-  bodyAttr
+  bodyAttr,
+  state // includes sort and filter data
+
 }) {
 
   const renderedData = useMemo(() => {
@@ -21,7 +23,7 @@ export default function Table({
 
       return <tr key={JSON.stringify(t)}>{collection}</tr>
     })
-  }, [data, bodyAttr])
+  }, [data, bodyAttr, state])
 
   return (
     <table {...attr} >
