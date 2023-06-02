@@ -1,12 +1,22 @@
 const config = [
   {
-    title: "admin layout pages",
+    title: "home",
     data: [
       {
         icon: "fas fa-tv",
         title: "dashboard",
         link: "/admin/dashboard"
       },
+      {
+        icon: "fas fa-money-check",
+        title: "transaction",
+        link: "/admin/transaction"
+      }
+    ]
+  },
+  {
+    title: "admin layout pages",
+    data: [
       {
         icon: "fas fa-user",
         title: "Profile",
