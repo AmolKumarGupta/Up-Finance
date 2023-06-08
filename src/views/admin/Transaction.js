@@ -36,8 +36,9 @@ export default function Transaction() {
     <>
       <div className="flex flex-wrap relative">
         <div className="w-full mb-12 mx-4 rounded text-blueGray-700 bg-white">
-          <div className="py-2 px-4">
+          <div className="flex justify-between items-center py-2 px-4">
             <h3 className="font-semibold text-xl">Transactions</h3>
+            <input className="py-2 px-2 rounded border border-gray-300 focus:border-gray-300 focus-visible:border-gray-300" placeholder="Search ..." />
           </div>
           <table className="w-full shadow-lg rounded border-collapse ">
             <thead>
