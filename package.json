@@ -12,6 +12,7 @@
     "chart.js": "2.9.4",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.8",
+    "jwt-decode": "^3.1.2",
     "postcss": "^8.4.24",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -26,8 +27,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm run watch:build && npm start",
-    "watch:build": "postcss src/assets/styles/index.css -o src/assets/styles/tailwind.css", 
-    "watch:css": "postcss src/assets/styles/index.css -o src/assets/styles/tailwind.css --watch" 
+    "watch:build": "postcss src/assets/styles/index.css -o src/assets/styles/tailwind.css",
+    "watch:css": "postcss src/assets/styles/index.css -o src/assets/styles/tailwind.css --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
