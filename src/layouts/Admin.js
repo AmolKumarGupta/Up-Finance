@@ -17,6 +17,7 @@ import { AuthContext } from "index";
 import Profile from "views/admin/Profile";
 import Tester from "views/admin/Tester";
 import Transaction from "views/admin/Transaction";
+import { isExpired } from "auth/token";
 
 export default function Admin() {
   const auth = useContext(AuthContext);
@@ -24,6 +25,9 @@ export default function Admin() {
 
   useEffect(() => {
     if (!auth.token) {
+      history.push('/auth')
+    }
+    if (isExpired(auth.token)) {
       history.push('/auth')
     }
   }, [history, auth.token])
