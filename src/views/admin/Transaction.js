@@ -38,7 +38,10 @@ export default function Transaction() {
         <div className="w-full mb-12 mx-4 rounded text-blueGray-700 bg-white">
           <div className="flex justify-between items-center py-2 px-4">
             <h3 className="font-semibold text-xl">Transactions</h3>
-            <input className="py-2 px-2 rounded border border-gray-300 focus:border-gray-300 focus-visible:border-gray-300" placeholder="Search ..." />
+            <div className="flex gap-2 items-center ">
+              <i className="fa fa-plus p-1 [line-height:.75rem] text-white bg-lightBlue-600 text-sm rounded-full cursor-pointer"></i>
+              <input className="py-2 px-2 rounded border border-gray-300 focus:border-gray-300 focus-visible:border-gray-300" placeholder="Search ..." />
+            </div>
           </div>
           <table className="w-full shadow-lg rounded border-collapse ">
             <thead>
