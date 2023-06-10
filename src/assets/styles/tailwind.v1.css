@@ -201,7 +201,8 @@ Correct the inability to style clickable types in iOS and Safari.
 */
 
 button,
-[type='button'] {
+[type='button'],
+[type='submit'] {
   -webkit-appearance: button;
 }
 
@@ -1219,6 +1220,11 @@ select {
   background-color: rgba(30, 41, 59, var(--tw-bg-opacity));
 }
 
+.hover\:bg-blueGray-100:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(241, 245, 249, var(--tw-bg-opacity));
+}
+
 .active\:bg-indigo-600:active {
   --tw-bg-opacity: 1;
   background-color: rgba(79, 70, 229, var(--tw-bg-opacity));
@@ -1264,6 +1270,11 @@ select {
   border-color: rgba(3, 105, 161, var(--tw-border-opacity));
 }
 
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgba(212, 212, 216, var(--tw-border-opacity));
+}
+
 .border-blueGray-50 {
   --tw-border-opacity: 1;
   border-color: rgba(248, 250, 252, var(--tw-border-opacity));
@@ -1292,6 +1303,11 @@ select {
 .border-blueGray-600 {
   --tw-border-opacity: 1;
   border-color: rgba(71, 85, 105, var(--tw-border-opacity));
+}
+
+.focus\:border-gray-300:focus {
+  --tw-border-opacity: 1;
+  border-color: rgba(212, 212, 216, var(--tw-border-opacity));
 }
 
 .rounded {
@@ -2607,6 +2623,10 @@ select {
   }
 }
 
+[role="button"] {
+  cursor: pointer;
+}
+
 @media (min-width: 640px) {
   .sm\:block {
     display: block;
@@ -2680,10 +2700,6 @@ select {
 
   .md\:mt-4 {
     margin-top: 1rem;
-  }
-
-  .md\:mb-4 {
-    margin-bottom: 1rem;
   }
 
   .md\:mt-40 {
