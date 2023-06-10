@@ -1,3 +1,4 @@
+import Modal from "components/Modals/Modal"
 import { useMemo, useState } from "react"
 
 export default function Transaction() {
@@ -20,6 +21,8 @@ export default function Transaction() {
     },
   ])
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   const content = useMemo(() => {
     return data.map((e) => {
       return <tr key={e.id} className="hover:bg-blueGray-100">
@@ -39,7 +42,7 @@ export default function Transaction() {
           <div className="flex justify-between items-center py-2 px-4">
             <h3 className="font-semibold text-xl">Transactions</h3>
             <div className="flex gap-2 items-center ">
-              <i className="fa fa-plus p-1 [line-height:.75rem] text-white bg-lightBlue-600 text-sm rounded-full cursor-pointer"></i>
+              <i onClick={() => setModalOpen(true)} className="fa fa-plus p-1 [line-height:.75rem] text-white bg-lightBlue-600 text-sm rounded-full cursor-pointer"></i>
               <input className="py-2 px-2 rounded border border-gray-300 focus:border-gray-300 focus-visible:border-gray-300" placeholder="Search ..." />
             </div>
           </div>
@@ -71,6 +74,14 @@ export default function Transaction() {
           </table>
         </div>
       </div>
+
+      <Modal
+        isOpen={modalOpen}
+        handleOpen={setModalOpen}
+        title="Create Transaction"
+      >
+        <input />
+      </Modal>
     </>
   )
 }
