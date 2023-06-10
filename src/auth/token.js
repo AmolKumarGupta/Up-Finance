@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode";
 
 export default function token({ name, password }, callback) {
   var myHeaders = new Headers();
@@ -41,4 +42,13 @@ export function signup({ name, email, password }, callback) {
     .then(response => response.text())
     .then(result => callback(null, JSON.parse(result)))
     .catch(error => callback(error, null));
+}
+
+
+export function isExpired(token) {
+  let decoded = jwtDecode(token);
+  if (decoded.exp < Math.floor(Date.now() / 1000)) {
+    return true;
+  }
+  return false;
 }
