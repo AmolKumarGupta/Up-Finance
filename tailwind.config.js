@@ -1,28 +1,30 @@
 const plugin = require("tailwindcss/plugin");
 const colors = require("tailwindcss/colors");
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  purge: {
-    enabled: true,
-    content: [
-      "./public/**/*.html",
-      "./public/*.html",
-      "./src/**/*.js",
-      "./src/*.js",
-      "./src/**/*.html",
-      "./src/*.html",
-      "./public/**/*.js",
-      "./public/*.js",
-    ],
-    options: {
-      safelist: [],
-    },
-  },
+  content: [
+    "./public/**/*.html",
+    "./public/*.html",
+    "./src/**/*.js",
+    "./src/*.js",
+    "./src/**/*.html",
+    "./src/*.html",
+    "./public/**/*.js",
+    "./public/*.js",
+  ],
   theme: {
     colors: {
       ...colors,
     },
     extend: {
+      colors: {
+        lightBlue: colors.sky,
+        warmGray: colors.stone,
+        trueGray: colors.neutral,
+        coolGray: colors.gray,
+        blueGray: colors.slate
+      },
       minHeight: {
         "screen-75": "75vh",
       },
@@ -97,7 +99,7 @@ module.exports = {
   ],
   plugins: [
     require("@tailwindcss/forms"),
-    plugin(function ({ addComponents, theme }) {
+    plugin(function({ addComponents, theme }) {
       const screens = theme("screens", {});
       addComponents([
         {
