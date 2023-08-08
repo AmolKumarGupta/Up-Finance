@@ -1,5 +1,6 @@
 import Modal from "components/Modals/Modal"
 import { useMemo, useState } from "react"
+import transactionConfig from "config/transaction";
 
 export default function Transaction() {
   const [data] = useState([
@@ -80,7 +81,41 @@ export default function Transaction() {
         handleOpen={setModalOpen}
         title="Create Transaction"
       >
-        <input />
+
+        <div className="flex flex-wrap p-6 bg-blueGray-100">
+          {/* <div className="w-full px-4"> */}
+
+            <div className="relative w-full mb-3">
+              <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="trans-name">Name</label>
+              <input 
+                id="trans-name"
+                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" 
+              />
+            </div>
+
+            <div className="flex gap-2 w-full mb-3">
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="trans-type">Type</label>
+                <select 
+                  id="trans-type"
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" 
+                >
+                  { transactionConfig?.types.map(type => <option key={type} value={type.toLowerCase()}>{type}</option>) }
+                </select>
+              </div>
+
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="trans-amount">Amount</label>
+                <input 
+                  id="trans-amount"
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" 
+                />
+              </div>
+            </div>
+
+          {/* </div> */}
+        </div>
+
       </Modal>
     </>
   )

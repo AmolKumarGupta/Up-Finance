@@ -23,11 +23,11 @@ export default function Modal({ children, isOpen, handleOpen, title, okText, clo
                 <span className="sr-only">Close modal</span>
               </button>
             </div>
-            <div className="p-6 space-y-6">
+            <div className="">
               {children}
             </div>
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded dark:border-gray-600">
-              <button data-modal-hide="defaultModal" type="button" className="text-white bg-lightBlue-700 hover:bg-lightBlue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{okText ? okText : "Save"}</button>
+              <button data-modal-hide="defaultModal" type="button" className="text-white bg-lightBlue-500 hover:bg-lightBlue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{okText ? okText : "Save"}</button>
               <button onClick={() => handleOpen(false)} type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">{closeText ? closeText : "Close"}</button>
             </div>
           </div>
