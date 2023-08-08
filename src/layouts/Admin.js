@@ -26,8 +26,8 @@ export default function Admin() {
   useEffect(() => {
     if (!auth.token) {
       history.push('/auth')
-    }
-    if (isExpired(auth.token)) {
+      
+    }else if (isExpired(auth.token)) {
       history.push('/auth')
     }
   }, [history, auth.token])

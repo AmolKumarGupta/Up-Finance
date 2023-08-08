@@ -23,7 +23,7 @@ export default function Table({
 
       return <tr key={JSON.stringify(t)}>{collection}</tr>
     })
-  }, [data, bodyAttr, state])
+  }, [data, bodyAttr])
 
   return (
     <table {...attr} >
