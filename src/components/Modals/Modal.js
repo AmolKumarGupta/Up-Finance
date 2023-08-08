@@ -3,7 +3,7 @@ export default function Modal({ children, isOpen, handleOpen, title, okText, clo
 
   function handleFocus(e) {
     let id = e.target.getAttribute("id");
-    if (id == "defaultModal") {
+    if (id === "defaultModal") {
       handleOpen(false)
     }
     e.stopPropagation()
