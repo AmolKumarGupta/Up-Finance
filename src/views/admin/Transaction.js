@@ -1,40 +1,35 @@
 import Modal from "components/Modals/Modal"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import transactionConfig from "config/transaction";
 
 export default function Transaction() {
-  const [data] = useState([
-    {
-      id: 1,
-      name: "Pen",
-      type: "expense",
-      amount: 100.00
-    }, {
-      id: 2,
-      name: "Cardboard",
-      type: "expense",
-      amount: 200.00
-    }, {
-      id: 3,
-      name: "Rent",
-      type: "income",
-      amount: 3000.00
-    },
-  ])
-
   const [modalOpen, setModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    type: transactionConfig?.types[0],
+    amount: 0
+  });
 
-  const content = useMemo(() => {
-    return data.map((e) => {
-      return <tr key={e.id} className="hover:bg-blueGray-100">
-        {
-          Object.entries(e).map(([key, val]) => {
-            return <td className="p-2 text-center" key={`${key}-${e.id}`}>{val}</td>
-          })
-        }
-      </tr>
-    })
-  }, [data])
+  const [errorBag, setErrorBag] = useState({});
+
+  function handleSave() {
+    if (! formData.name) {
+      setErrorBag({name: 'required'})
+      return;
+    }
+    
+    if (! formData.type) {
+      setErrorBag({type: 'required'})
+      return;
+    }
+
+    if (! formData.amount) {
+      setErrorBag({amount: 'required'})
+      return;
+    }
+
+    console.dir({formData, errorBag})
+  }
 
   return (
     <>
@@ -59,7 +54,7 @@ export default function Transaction() {
               </tr>
             </thead>
             <tbody>
-              {content}
+              {/* {content} */}
             </tbody>
             <tfoot>
               <tr>
@@ -80,16 +75,17 @@ export default function Transaction() {
         isOpen={modalOpen}
         handleOpen={setModalOpen}
         title="Create Transaction"
+        onSave={handleSave}
       >
 
         <div className="flex flex-wrap p-6 bg-blueGray-100">
-          {/* <div className="w-full px-4"> */}
-
             <div className="relative w-full mb-3">
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="trans-name">Name</label>
               <input 
                 id="trans-name"
-                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" 
+                className={`${ errorBag.name? 'border border-red-500': 'border-0' } px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150`} 
+                value={formData.name}
+                onChange={(ev) => setFormData(prev => { return {...prev, name: ev.target.value} })}
               />
             </div>
 
@@ -98,9 +94,15 @@ export default function Transaction() {
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="trans-type">Type</label>
                 <select 
                   id="trans-type"
-                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" 
+                  className="capitalize border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" 
+                  value={formData.type}
+                  onChange={(ev) => setFormData((prev => {return {...prev, type: ev.target.value.toLocaleLowerCase()}}))}
                 >
-                  { transactionConfig?.types.map(type => <option key={type} value={type.toLowerCase()}>{type}</option>) }
+                  { 
+                    transactionConfig?.types.map(type => {
+                      return <option key={type} value={type.toLowerCase()} className="capitalize" >{type}</option>
+                    }) 
+                  }
                 </select>
               </div>
 
@@ -108,12 +110,12 @@ export default function Transaction() {
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="trans-amount">Amount</label>
                 <input 
                   id="trans-amount"
-                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" 
+                  className={`${errorBag.amount? 'border border-red-500': 'border-0'} px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150`} 
+                  value={formData.amount}
+                  onChange={(ev) => setFormData(prev => {return {...prev, amount: ev.target.value.replace(/[^0-9.-]/g, '')}})}
                 />
               </div>
             </div>
-
-          {/* </div> */}
         </div>
 
       </Modal>

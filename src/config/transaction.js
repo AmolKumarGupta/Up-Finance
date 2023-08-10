@@ -1,8 +1,8 @@
 const config = {
     types: [
-        'Expense',
-        'Saving',
-        'Income'
+        'expense',
+        'saving',
+        'income'
     ]
 };
 
