@@ -1,6 +1,7 @@
 import Modal from "components/Modals/Modal"
 import { useState } from "react"
 import transactionConfig from "config/transaction";
+import { createTransaction } from "models/transaction";
 
 export default function Transaction() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -12,7 +13,7 @@ export default function Transaction() {
 
   const [errorBag, setErrorBag] = useState({});
 
-  function handleSave() {
+  async function handleSave() {
     if (! formData.name) {
       setErrorBag({name: 'required'})
       return;
@@ -28,7 +29,17 @@ export default function Transaction() {
       return;
     }
 
-    console.dir({formData, errorBag})
+    try {
+      const response = await createTransaction(formData)
+      const result = await response.text()
+      const parsedResult = JSON.parse(result)
+      if (! parsedResult.errors) {
+        setModalOpen(false)
+      }
+
+    }catch (err) {
+      alert('Something went wrong')
+    }
   }
 
   return (
