@@ -1,3 +1,27 @@
+
+export function transactions() {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var graphql = JSON.stringify({
+    query: `{
+      transactions {
+        _id, name, type, amount
+      }
+    }`,
+    variables: {}
+  })
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: graphql,
+    redirect: 'follow'
+  };
+
+  return fetch(process.env.REACT_APP_GRAPHQL_URL, requestOptions)
+}
+
 export function createTransaction(input) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");

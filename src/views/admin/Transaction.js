@@ -1,17 +1,48 @@
 import Modal from "components/Modals/Modal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import transactionConfig from "config/transaction";
 import { createTransaction } from "models/transaction";
+import { transactions } from "models/transaction";
 
 export default function Transaction() {
+  const [content, setContent] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     type: transactionConfig?.types[0],
     amount: 0
   });
-
   const [errorBag, setErrorBag] = useState({});
+
+  
+  useEffect(() => {
+    transactions()
+      .then(res => res.text())
+      .then(data => {
+        const parsedData = JSON.parse(data);
+        const rows = parsedData.data.transactions
+
+        let counter = 1;
+        const tabledata = rows.map((e) => {
+          return <tr key={e._id} className="hover:bg-blueGray-100">
+            {
+              Object.entries(e).map(([key, val]) => {
+                if (key === '_id') {
+                  val = counter++
+                }
+
+                return <td className="p-2 text-center" key={`${key}-${e._id}`}>{val}</td>
+              })
+            }
+          </tr>
+        });
+
+        setContent(tabledata)
+      })
+
+    return () => setContent(null)
+    
+  }, [])
 
   async function handleSave() {
     if (! formData.name) {
@@ -65,7 +96,7 @@ export default function Transaction() {
               </tr>
             </thead>
             <tbody>
-              {/* {content} */}
+              {content}
             </tbody>
             <tfoot>
               <tr>
