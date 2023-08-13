@@ -22,14 +22,21 @@ export default function Transaction() {
         const parsedData = JSON.parse(data);
         const rows = parsedData.data.transactions
 
-        let counter = 1;
+        let tableStruct = {
+          index: 1,
+          name: (data) => data?.name,
+          type: (data) => data?.type,
+          amount: (data) => "Rs. "+ data?.amount,
+          action: (data) => <i className="fa fa-sm fa-trash text-red-500 cursor-pointer"></i>
+        };
+
         const tabledata = rows.map((e) => {
           return <tr key={e._id} className="hover:bg-blueGray-100">
             {
-              Object.entries(e).map(([key, val]) => {
-                if (key === '_id') {
-                  val = counter++
-                }
+              Object.entries(tableStruct).map(([key, cb]) => {
+                let val = (key === 'index')
+                  ? tableStruct.index++
+                  : cb(e)
 
                 return <td className="p-2 text-center" key={`${key}-${e._id}`}>{val}</td>
               })
@@ -40,7 +47,7 @@ export default function Transaction() {
         setContent(tabledata)
       })
 
-    return () => setContent(null)
+    return () => setContent([])
     
   }, [])
 
@@ -93,6 +100,7 @@ export default function Transaction() {
                 <th className="p-2">Name</th>
                 <th className="p-2">Type</th>
                 <th className="p-2">Amount</th>
+                <th className="p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -106,6 +114,7 @@ export default function Transaction() {
                 <th className="p-2">Name</th>
                 <th className="p-2">Type</th>
                 <th className="p-2">Amount</th>
+                <th className="p-2">Actions</th>
               </tr>
 
             </tfoot>
