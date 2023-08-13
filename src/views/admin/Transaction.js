@@ -84,6 +84,13 @@ export default function Transaction() {
       const parsedResult = JSON.parse(result)
       if (! parsedResult.errors) {
         setModalOpen(false)
+        transactions()
+          .then(res => res.text())
+          .then(data => {
+            const parsedData = JSON.parse(data);
+            const rows = parsedData.data.transactions
+            setRows(rows)
+          })
       }
 
     }catch (err) {
