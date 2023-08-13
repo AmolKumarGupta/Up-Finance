@@ -1,11 +1,11 @@
 import Modal from "components/Modals/Modal"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import transactionConfig from "config/transaction";
 import { createTransaction } from "models/transaction";
 import { transactions } from "models/transaction";
 
 export default function Transaction() {
-  const [content, setContent] = useState([]);
+  const [rows, setRows] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -14,6 +14,40 @@ export default function Transaction() {
   });
   const [errorBag, setErrorBag] = useState({});
 
+  const handleDelete = (id, rows = null) => {
+    if (! id || rows===null) {
+      return alert('Something went wrong!')
+    }
+
+    if (window.confirm('Are you really want to delete?')) {
+      setRows((rows) => rows.filter((data) => data._id!==id))
+    }
+    return
+  }
+
+  const content = useMemo(() => {
+    let tableStruct = {
+      index: 1,
+      name: (data, rows = null) => data?.name,
+      type: (data, rows = null) => data?.type,
+      amount: (data, rows = null) => "Rs. "+ data?.amount,
+      action: (data, rows = null) => <i onClick={ () => handleDelete(data?._id, rows) } className="fa fa-sm fa-trash text-red-500 cursor-pointer"></i>
+    };
+
+    return rows.map((e) => {
+      return <tr key={e._id} className="hover:bg-blueGray-100">
+        {
+          Object.entries(tableStruct).map(([key, cb]) => {
+            let val = (key === 'index')
+              ? tableStruct.index++
+              : cb(e, rows)
+
+            return <td className="p-2 text-center" key={`${key}-${e._id}`}>{val}</td>
+          })
+        }
+      </tr>
+    });
+  }, [rows])
   
   useEffect(() => {
     transactions()
@@ -21,36 +55,13 @@ export default function Transaction() {
       .then(data => {
         const parsedData = JSON.parse(data);
         const rows = parsedData.data.transactions
-
-        let tableStruct = {
-          index: 1,
-          name: (data) => data?.name,
-          type: (data) => data?.type,
-          amount: (data) => "Rs. "+ data?.amount,
-          action: (data) => <i className="fa fa-sm fa-trash text-red-500 cursor-pointer"></i>
-        };
-
-        const tabledata = rows.map((e) => {
-          return <tr key={e._id} className="hover:bg-blueGray-100">
-            {
-              Object.entries(tableStruct).map(([key, cb]) => {
-                let val = (key === 'index')
-                  ? tableStruct.index++
-                  : cb(e)
-
-                return <td className="p-2 text-center" key={`${key}-${e._id}`}>{val}</td>
-              })
-            }
-          </tr>
-        });
-
-        setContent(tabledata)
+        setRows(rows)
       })
 
-    return () => setContent([])
-    
+    return () => setRows([])
   }, [])
 
+  
   async function handleSave() {
     if (! formData.name) {
       setErrorBag({name: 'required'})
