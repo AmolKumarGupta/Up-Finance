@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import transactionConfig from "config/transaction";
 import { createTransaction } from "models/transaction";
 import { transactions } from "models/transaction";
+import { deleteTransaction } from "models/transaction";
 
 export default function Transaction() {
   const [rows, setRows] = useState([]);
@@ -14,13 +15,25 @@ export default function Transaction() {
   });
   const [errorBag, setErrorBag] = useState({});
 
-  const handleDelete = (id, rows = null) => {
+  const handleDelete = async (id, rows = null) => {
     if (! id || rows===null) {
       return alert('Something went wrong!')
     }
 
     if (window.confirm('Are you really want to delete?')) {
-      setRows((rows) => rows.filter((data) => data._id!==id))
+      const response = await deleteTransaction(id)
+      if (response === null) {
+        return;
+      }
+
+      const result = await response.text()
+      const parsedResult = JSON.parse(result)
+      if (parsedResult.errors) {
+        return;
+      }
+      if (parsedResult?.data?.transaction_delete) {
+        setRows((rows) => rows.filter((data) => data._id!==id))
+      }
     }
     return
   }
