@@ -1,9 +1,7 @@
 import Modal from "components/Modals/Modal"
 import { useEffect, useMemo, useState } from "react"
 import transactionConfig from "config/transaction";
-import { createTransaction } from "models/transaction";
-import { transactions } from "models/transaction";
-import { deleteTransaction } from "models/transaction";
+import { createTransaction, transactions, deleteTransaction } from "models/transaction";
 
 export default function Transaction() {
   const [rows, setRows] = useState([]);
@@ -15,9 +13,10 @@ export default function Transaction() {
   });
   const [errorBag, setErrorBag] = useState({});
   const [tableMeta, setTableMeta] = useState({
-    page: 1,
-    limit: 10
+    limit: 5,
+    page: 1
   });
+  const [tableResult, setTableResult] = useState({totalPages: null})
 
   const handleDelete = async (id, rows = null) => {
     if (! id || rows===null) {
@@ -67,16 +66,17 @@ export default function Transaction() {
   }, [rows])
   
   useEffect(() => {
-    transactions()
+    transactions(tableMeta)
       .then(res => res.text())
-      .then(data => {
-        const parsedData = JSON.parse(data);
-        const rows = parsedData.data.transactions
-        setRows(rows)
+      .then(json => {
+        const parsedData = JSON.parse(json);
+        const data = parsedData.data.transactions
+        setRows(data.data)
+        setTableResult(prev => {
+          return { ...prev, totalPages: data.totalPages }
+        })
       })
-
-    return () => setRows([])
-  }, [])
+  }, [tableMeta])
 
   
   async function handleSave() {
@@ -101,12 +101,15 @@ export default function Transaction() {
       const parsedResult = JSON.parse(result)
       if (! parsedResult.errors) {
         setModalOpen(false)
-        transactions()
+        transactions(tableMeta)
           .then(res => res.text())
-          .then(data => {
-            const parsedData = JSON.parse(data);
-            const rows = parsedData.data.transactions
-            setRows(rows)
+          .then(json => {
+            const parsedData = JSON.parse(json);
+            const data = parsedData.data.transactions
+            setRows(data.data)
+            setTableResult(prev => {
+              return { ...prev, totalPages: data.totalPages }
+            })
           })
       }
 
@@ -116,11 +119,11 @@ export default function Transaction() {
   }
 
   function navigatePage(data = 1) {
+    if (tableMeta.page && tableMeta.page+data < 1) return;
+    if (tableMeta.page && tableMeta.page+data > tableResult.totalPages) return;
+
     setTableMeta(prev => {
-      return {
-        ...prev, 
-        page: (prev.page && prev.page+data > 0) ? prev.page+data: 1
-      }
+      return { ...prev, page: prev.page+data }
     })
   }
 
