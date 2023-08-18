@@ -1,15 +1,21 @@
 
-export function transactions() {
+export function transactions({limit = 10, page = 1}) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
   var graphql = JSON.stringify({
-    query: `{
-      transactions {
-        _id, name, type, amount
+    query: `query all($limit: Int, $page: Int) {
+      transactions(limit: $limit, page: $page) {
+        data {
+          _id, name, type, amount
+        },
+        totalPages
       }
     }`,
-    variables: {}
+    variables: {
+      "limit": limit,
+      "page": page
+    }
   })
 
   var requestOptions = {

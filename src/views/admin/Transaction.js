@@ -1,9 +1,7 @@
 import Modal from "components/Modals/Modal"
 import { useEffect, useMemo, useState } from "react"
 import transactionConfig from "config/transaction";
-import { createTransaction } from "models/transaction";
-import { transactions } from "models/transaction";
-import { deleteTransaction } from "models/transaction";
+import { createTransaction, transactions, deleteTransaction } from "models/transaction";
 
 export default function Transaction() {
   const [rows, setRows] = useState([]);
@@ -14,6 +12,11 @@ export default function Transaction() {
     amount: 0
   });
   const [errorBag, setErrorBag] = useState({});
+  const [tableMeta, setTableMeta] = useState({
+    limit: 5,
+    page: 1
+  });
+  const [tableResult, setTableResult] = useState({totalPages: null})
 
   const handleDelete = async (id, rows = null) => {
     if (! id || rows===null) {
@@ -63,16 +66,17 @@ export default function Transaction() {
   }, [rows])
   
   useEffect(() => {
-    transactions()
+    transactions(tableMeta)
       .then(res => res.text())
-      .then(data => {
-        const parsedData = JSON.parse(data);
-        const rows = parsedData.data.transactions
-        setRows(rows)
+      .then(json => {
+        const parsedData = JSON.parse(json);
+        const data = parsedData.data.transactions
+        setRows(data.data)
+        setTableResult(prev => {
+          return { ...prev, totalPages: data.totalPages }
+        })
       })
-
-    return () => setRows([])
-  }, [])
+  }, [tableMeta])
 
   
   async function handleSave() {
@@ -97,12 +101,15 @@ export default function Transaction() {
       const parsedResult = JSON.parse(result)
       if (! parsedResult.errors) {
         setModalOpen(false)
-        transactions()
+        transactions(tableMeta)
           .then(res => res.text())
-          .then(data => {
-            const parsedData = JSON.parse(data);
-            const rows = parsedData.data.transactions
-            setRows(rows)
+          .then(json => {
+            const parsedData = JSON.parse(json);
+            const data = parsedData.data.transactions
+            setRows(data.data)
+            setTableResult(prev => {
+              return { ...prev, totalPages: data.totalPages }
+            })
           })
       }
 
@@ -111,15 +118,24 @@ export default function Transaction() {
     }
   }
 
+  function navigatePage(data = 1) {
+    if (tableMeta.page && tableMeta.page+data < 1) return;
+    if (tableMeta.page && tableMeta.page+data > tableResult.totalPages) return;
+
+    setTableMeta(prev => {
+      return { ...prev, page: prev.page+data }
+    })
+  }
+
   return (
     <>
       <div className="flex flex-wrap relative">
-        <div className="w-full mb-12 mx-4 rounded text-blueGray-700 bg-white">
+        <div className="w-full mb-2 mx-4 rounded text-blueGray-700 bg-white">
           <div className="flex justify-between items-center py-2 px-4">
             <h3 className="font-semibold text-xl">Transactions</h3>
             <div className="flex gap-2 items-center ">
               <i onClick={() => setModalOpen(true)} className="fa fa-plus p-1 [line-height:.75rem] text-white bg-lightBlue-600 text-sm rounded-full cursor-pointer"></i>
-              <input className="py-2 px-2 rounded border border-gray-300 focus:border-gray-300 focus-visible:border-gray-300" placeholder="Search ..." />
+              <input className="hidden py-2 px-2 rounded border border-gray-300 focus:border-gray-300 focus-visible:border-gray-300" placeholder="Search ..." />
             </div>
           </div>
           <table className="w-full shadow-lg rounded border-collapse ">
@@ -150,6 +166,57 @@ export default function Transaction() {
 
             </tfoot>
           </table>
+        </div>
+
+        <div className="mx-4 ms-auto mb-12 inline-flex justify-center gap-1">
+          <button onClick={() => navigatePage(-1)} className="inline-flex h-8 w-8 items-center justify-center rounded border border-white bg-lightBlue-600 text-white rtl:rotate-180 cursor-pointer">
+            <span className="sr-only">Prev Page</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3 w-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+
+          <div>
+            <label htmlFor="PaginationPage" className="sr-only">Page</label>
+
+            <input
+              type="number"
+              className="h-8 w-12 rounded border border-gray-100 bg-white p-0 text-center text-xs font-medium text-gray-900 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+              min="1"
+              value={tableMeta.page}
+              onChange={
+                (ev) => { ev.preventDefault() }
+              }
+            />
+          </div>
+
+          <button 
+            onClick={() => navigatePage(1)}
+            className="inline-flex h-8 w-8 items-center justify-center rounded border border-white bg-lightBlue-600 text-white rtl:rotate-180 cursor-pointer"
+          >
+            <span className="sr-only">Next Page</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3 w-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
         </div>
       </div>
 
