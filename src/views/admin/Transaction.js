@@ -135,7 +135,7 @@ export default function Transaction() {
             <h3 className="font-semibold text-xl">Transactions</h3>
             <div className="flex gap-2 items-center ">
               <i onClick={() => setModalOpen(true)} className="fa fa-plus p-1 [line-height:.75rem] text-white bg-lightBlue-600 text-sm rounded-full cursor-pointer"></i>
-              <input className="py-2 px-2 rounded border border-gray-300 focus:border-gray-300 focus-visible:border-gray-300" placeholder="Search ..." />
+              <input className="hidden py-2 px-2 rounded border border-gray-300 focus:border-gray-300 focus-visible:border-gray-300" placeholder="Search ..." />
             </div>
           </div>
           <table className="w-full shadow-lg rounded border-collapse ">
