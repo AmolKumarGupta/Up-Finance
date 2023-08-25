@@ -43,7 +43,7 @@ export default function Transaction() {
 
   const content = useMemo(() => {
     let tableStruct = {
-      index: 1,
+      index: 1+(tableMeta.page-1) * tableMeta.limit,
       name: (data, rows = null) => data?.name,
       type: (data, rows = null) => data?.type,
       amount: (data, rows = null) => "Rs. "+ data?.amount,
@@ -63,7 +63,7 @@ export default function Transaction() {
         }
       </tr>
     });
-  }, [rows])
+  }, [rows, tableMeta])
   
   useEffect(() => {
     transactions(tableMeta)
